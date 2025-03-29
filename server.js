@@ -4,7 +4,6 @@ const cors = require('cors')
 const redisClient = require('./config/redis');
 const zookeeperClient = require('./config/zookeeper');
 const { initializeZNodes, generateUniqueId } = require('./services/zookeeperService');
-const tokenBucketRateLimiter = require('./middlewares/tokenBucketRateLimiter');
 
 
 const app = express();
@@ -44,7 +43,6 @@ async function initializeServices() {
 
 function setupRoutes() {
   app.use(express.json());
-  // app.use(tokenBucketRateLimiter);
   app.get('/',(req,res) => res.send('heellp'))
   app.use('/api', require('./routes/urlRoutes'));
 }
