@@ -1,0 +1,57 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.env
+.env.local
+.env.*.local
+
+# Logs
+logs/
+*.log
+*.log.*
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory
+coverage/
+.nyc_output/
+
+# MongoDB data
+*.mongodb
+
+# Redis dump
+dump.rdb
+*.rdb
+
+# OS generated
+.DS_Store
+Thumbs.db
+
+# VSCode
+.vscode/
+
+# Build and Dist
+dist/
+build/
+
+# React
+*.cache/
+.cache/
+*.webmanifest
+*.map
+
+# IDEs
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Misc
+*.tgz
+*.tar.gz
+
+# Test output
+test-output/

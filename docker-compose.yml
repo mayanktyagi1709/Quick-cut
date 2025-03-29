@@ -1,0 +1,91 @@
+version: '3.9'
+
+networks:
+  app-net:
+    driver: bridge
+
+services:
+  backend:
+    build: .
+    container_name: url-shortener
+    ports:
+      - "8080:8080"
+    networks:
+      - app-net
+    depends_on:
+      redis:
+        condition: service_healthy
+      zookeeper1:
+        condition: service_healthy
+      zookeeper2:
+        condition: service_healthy
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - ZOOKEEPER_URLS=zookeeper1:2181,zookeeper2:2182
+
+  redis:
+    image: redis:7.2-alpine
+    container_name: redis
+    command: redis-server --save 60 1 --appendonly yes
+    networks:
+      - app-net
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "healthcheck"]
+      interval: 5s
+      timeout: 10s
+      retries: 10
+      start_period: 40s
+    volumes:
+      - redis_data:/data
+
+  zookeeper1:
+    image: zookeeper:3.9.2
+    container_name: zk1
+    hostname: zookeeper1
+    networks:
+      - app-net
+    environment:
+      ZOO_MY_ID: 1
+      ZOO_SERVERS: server.1=zookeeper1:2888:3888;2181 server.2=zookeeper2:2888:3888;2182
+      ZOO_4LW_COMMANDS_WHITELIST: "*"
+      ZOO_INIT_LIMIT: 15
+      ZOO_SYNC_LIMIT: 10
+    healthcheck:
+      test: ["CMD-SHELL", "zkServer.sh status || exit 1"]
+      interval: 20s
+      timeout: 30s
+      retries: 15
+      start_period: 90s
+    volumes:
+      - zk1-data:/data
+      - zk1-log:/datalog
+
+  zookeeper2:
+    image: zookeeper:3.9.2
+    container_name: zk2
+    hostname: zookeeper2
+    networks:
+      - app-net
+    environment:
+      ZOO_MY_ID: 2
+      ZOO_SERVERS: server.1=zookeeper1:2888:3888;2181 server.2=zookeeper2:2888:3888;2182
+      ZOO_4LW_COMMANDS_WHITELIST: "*"
+      ZOO_INIT_LIMIT: 15
+      ZOO_SYNC_LIMIT: 10
+    healthcheck:
+      test: ["CMD-SHELL", "zkServer.sh status || exit 1"]
+      interval: 20s
+      timeout: 30s
+      retries: 15
+      start_period: 90s
+    volumes:
+      - zk2-data:/data
+      - zk2-log:/datalog
+
+volumes:
+  redis_data:
+  zk1-data:
+  zk1-log:
+  zk2-data:
+  zk2-log:
