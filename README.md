@@ -219,6 +219,6 @@ This project is open-source and available under the [MIT License](LICENSE).
 
 ## 👨‍💻 Author
 
-**Rohit Kumar**  
-📧 [rohit.kumpan01@gmail.com](mailto:rohit.kumpan01@gmail.com)  
-🌐 [GitHub: @rohit9123](https://github.com/rohit9123)
+**Mayank Tyagi**  
+📧 [Mail](mailto:mayanktyagi1709@gmail.com)  
+🌐 [GitHub](https://github.com/mayanktyagi1709)
